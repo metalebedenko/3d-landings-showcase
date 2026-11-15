@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Три демонстрационных лендинга о прототипах, деталях и пилотных сериях. Статическое портфолио.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+  <title>3D Landings — три задачи, три сценария</title>
+  <link rel="icon" href="sites/techproto3d/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="sites/techproto3d/assets/fonts/fonts.css">
+  <style>
+    :root{color-scheme:light;--ink:#17302e;--muted:#53645f;--paper:#f4f3ed;--line:#d2d9d1;--accent:#d9ff78}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.6}a{color:inherit}a:focus-visible{outline:3px solid #36756a;outline-offset:5px}
+    main,header,footer{width:min(1280px,calc(100% - 80px));margin:auto}header{display:flex;justify-content:space-between;align-items:center;padding:30px 0;border-bottom:1px solid var(--line);gap:20px}.wordmark{font-weight:800;letter-spacing:-.04em;font-size:23px}.label{font-size:12px;letter-spacing:.12em;text-transform:uppercase}.pill{padding:7px 12px;border:1px solid var(--line);border-radius:30px;font-size:12px}
+    .intro{display:grid;grid-template-columns:1.4fr 1fr;gap:70px;padding:55px 0 43px;align-items:end}h1{font-family:'Inter Tight',Inter,sans-serif;font-size:clamp(42px,5.4vw,76px);line-height:1.02;letter-spacing:-.055em;font-weight:650;margin:18px 0 0}.intro p{max-width:430px;font-size:17px;color:var(--muted);margin:0 0 6px}.intro strong{color:var(--ink);font-weight:500}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-4px);border-color:#668379}.art{height:215px;background:#e6eae5;overflow:hidden;position:relative}.art img{display:block;width:100%;height:100%;object-fit:cover}.number{position:absolute;top:14px;left:14px;border-radius:50%;width:35px;height:35px;display:grid;place-items:center;background:var(--paper);font-size:12px}.body{padding:24px;flex:1;display:flex;flex-direction:column}.body .label{color:var(--muted);font-size:10px}.body h2{font-size:26px;letter-spacing:-.045em;line-height:1.15;margin:12px 0}.body p{font-size:14px;color:var(--muted);margin:0 0 22px}.open{margin-top:auto;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px;font-size:13px;font-weight:600}.open span:last-child{font-size:22px;line-height:1}
+    .detail{display:flex;justify-content:space-between;align-items:center;gap:30px;background:var(--ink);color:#f8fff1;border-radius:16px;margin:25px 0;padding:22px 27px}.detail p{margin:0;font-size:14px;max-width:770px}.detail a{flex-shrink:0;background:var(--accent);color:var(--ink);padding:11px 17px;border-radius:8px;font-size:13px;font-weight:650;text-decoration:none}footer{display:flex;justify-content:space-between;gap:30px;padding:13px 0 30px;color:var(--muted);font-size:11px}footer p{margin:0;max-width:750px}
+    @media(max-width:900px){main,header,footer{width:calc(100% - 36px)}.intro{grid-template-columns:1fr;gap:22px;padding:34px 0}.grid{grid-template-columns:1fr}.art{height:240px}.detail,footer{align-items:flex-start;flex-direction:column;gap:15px}.body h2{font-size:30px}.intro p{max-width:650px}.pill{max-width:155px}.detail a{align-self:flex-start}}
+    @media(prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+  </style>
+</head>
+<body>
+  <header><span class="wordmark">3D LANDINGS<span style="color:#698378"> / </span></span><span class="pill">Портфолио · статическое демо</span></header>
+  <main>
+    <section class="intro"><div><span class="label">Продукт · интерфейс · прототип</span><h1>Три задачи.<br>Три пути к заявке.</h1></div><p>Как объяснить техническую услугу человеку, которому нужен результат? <strong>Три сценария — от замены детали до небольшой серии.</strong> Откройте страницы, сравните подходы и попробуйте форму.</p></section>
+    <section class="grid" aria-label="Демонстрационные страницы">
+      <a class="card" href="sites/plastfactory/index.html"><div class="art"><img src="sites/plastfactory/assets/img/hero.jpg" alt="Стоковая иллюстрация пластиковой детали"><span class="number">01</span></div><div class="body"><span class="label">PlastFactory / по образцу</span><h2>Деталь, которую<br>нужно заменить</h2><p>От образца и условий работы до понятного описания задачи.</p><div class="open"><span>Открыть сценарий</span><span aria-hidden="true">↗</span></div></div></a>
+      <a class="card" href="sites/silikonforms/index.html"><div class="art"><img src="sites/silikonforms/assets/img/mold.jpg" alt="Стоковая иллюстрация формы и деталей"><span class="number">02</span></div><div class="body"><span class="label">SilikonForms / пилотная партия</span><h2>Проверить продукт<br>малой серией</h2><p>Материал, тираж и маршрут изготовления перед масштабированием.</p><div class="open"><span>Открыть сценарий</span><span aria-hidden="true">↗</span></div></div></a>
+      <a class="card" href="sites/techproto3d/index.html"><div class="art"><img src="sites/techproto3d/assets/img/device.svg" alt="Авторская схема функционального корпуса"><span class="number">03</span></div><div class="body"><span class="label">TechProto3D / инженерная задача</span><h2>От идеи<br>до рабочего прототипа</h2><p>Требования, ограничения и выбор технологии для конкретной функции.</p><div class="open"><span>Открыть сценарий</span><span aria-hidden="true">↗</span></div></div></a>
+    </section>
+    <aside class="detail"><p><strong>Внутри — локальный STL-калькулятор.</strong> Искусственные параметры и приблизительная оценка помогают исследовать интерфейс расчёта. Файл обрабатывается в браузере.</p><a href="sites/silikonforms/calc/index.html">Попробовать расчёт ↗</a></aside>
+  </main>
+  <footer><p>Учебная демонстрация. Формы показывают результат на странице. Цены и сроки — примеры; приём заказов не ведётся. Фотографии — стоковые иллюстрации.</p><a href="THIRD_PARTY_NOTICES.md">Источники и права на материалы</a></footer>
+</body>
+</html>

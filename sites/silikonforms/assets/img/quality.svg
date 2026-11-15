@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1280" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+<title id="title">Three-point dimensional inspection</title>
+<desc id="description">Original illustration of an unbranded molded component with three inspection checkpoints.</desc>
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#a6bfd2" stroke-width="0.7" opacity="0.2"/></pattern>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbfdff"/><stop offset="1" stop-color="#9fb7cb"/></linearGradient>
+  <linearGradient id="side" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7d9bb5"/><stop offset="1" stop-color="#3d5d7a"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b91ff"/><stop offset="1" stop-color="#1451a3"/></linearGradient>
+  <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#365773"/><stop offset="1" stop-color="#142a42"/></linearGradient>
+  <radialGradient id="light"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#edf4fb"/></radialGradient>
+  <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#3483cc"/></marker>
+</defs>
+<rect width="1200" height="800" fill="url(#light)"/>
+<rect x="32" y="32" width="1136" height="736" rx="22" fill="url(#grid)"/>
+<ellipse cx="598" cy="624" rx="370" ry="50" fill="#537da9" opacity="0.12"/>
+<g stroke-linejoin="round">
+ <path d="M275 413L604 251L920 397L588 568Z" fill="#dce8f3" stroke="#9cb4c7" stroke-width="2"/>
+ <path d="M275 413V438L588 593V568Z" fill="#87a7be"/><path d="M588 568L920 397V422L588 593Z" fill="#b2c9dc"/>
+ <path d="M385 369L605 261L810 358L588 467Z" fill="url(#blue)" stroke="#215c9b" stroke-width="2"/>
+ <path d="M385 369V418L588 521V467Z" fill="#1b5596"/><path d="M588 467L810 358V407L588 521Z" fill="#0e3d78"/>
+ <path d="M479 368L604 306L716 359L589 423Z" fill="#d9edff" stroke="#8eb7db" stroke-width="3"/>
+ <path d="M479 368L589 423L716 359V385L589 448L479 393Z" fill="#0c335c"/>
+ <path d="M479 368L604 306L716 359L589 423Z" fill="#b8d3eb"/>
+</g>
+<g fill="none" stroke="#2c8c85" stroke-width="2">
+ <path d="M393 365L292 252H176M809 359L911 241H1022M589 519V666H817" stroke-dasharray="7 7"/>
+ <circle cx="393" cy="365" r="7" fill="#56c5b7"/><circle cx="809" cy="359" r="7" fill="#56c5b7"/><circle cx="589" cy="519" r="7" fill="#56c5b7"/>
+ <circle cx="190" cy="210" r="34" fill="#f2fffb"/><circle cx="1006" cy="198" r="34" fill="#f2fffb"/><circle cx="860" cy="666" r="34" fill="#f2fffb"/>
+ <path d="M175 210L185 220L207 196M991 198L1001 208L1023 184M845 666L855 676L877 652" stroke-width="5" stroke-linecap="round"/>
+</g>
+<g fill="#285e8e" font-family="system-ui, sans-serif" font-size="19" font-weight="600"><text x="171" y="148">A</text><text x="998" y="137">B</text><text x="854" y="729">C</text></g>
+<g fill="#5681a6" font-family="system-ui, sans-serif" font-size="14" letter-spacing="3"><text x="66" y="76">02 / INSPECTION STUDY</text><text x="944" y="731">SCHEMATIC</text></g>
+</svg>

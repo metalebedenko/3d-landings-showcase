@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1280" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+<title id="title">Exploded enclosure assembly</title>
+<desc id="description">Original schematic illustration of a generic enclosure, lid, seal and fasteners. Not a manufacturing drawing.</desc>
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#a6bfd2" stroke-width="0.7" opacity="0.2"/></pattern>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbfdff"/><stop offset="1" stop-color="#9fb7cb"/></linearGradient>
+  <linearGradient id="side" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7d9bb5"/><stop offset="1" stop-color="#3d5d7a"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b91ff"/><stop offset="1" stop-color="#1451a3"/></linearGradient>
+  <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#365773"/><stop offset="1" stop-color="#142a42"/></linearGradient>
+  <radialGradient id="light"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#edf4fb"/></radialGradient>
+  <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#3483cc"/></marker>
+</defs>
+<rect width="1200" height="800" fill="url(#light)"/>
+<rect x="32" y="32" width="1136" height="736" rx="22" fill="url(#grid)"/>
+<ellipse cx="601" cy="666" rx="353" ry="51" fill="#598cb6" opacity="0.13"/>
+<g stroke-linejoin="round">
+ <path d="M322 431L611 309L898 431L608 569Z" fill="#719ab9" stroke="#7499b5" stroke-width="2"/>
+ <path d="M322 431V555L608 692V569Z" fill="url(#side)"/><path d="M608 569L898 431V555L608 692Z" fill="#b4cbdc"/>
+ <path d="M353 433L610 328L868 433L608 552Z" fill="#d5e4ee"/>
+ <path d="M353 433V516L608 635L868 515V433L608 552Z" fill="#87a9c2"/>
+ <path d="M353 516L608 398L868 515L608 635Z" fill="#b1ccdf"/>
+ <path d="M319 285L611 167L902 285L608 418Z" fill="url(#metal)" stroke="#7196b2" stroke-width="2"/>
+ <path d="M319 285V313L608 449V418Z" fill="#7196b2"/><path d="M608 418L902 285V313L608 449Z" fill="#bfd3e3"/>
+ <path d="M348 284L611 183L875 285L608 402Z" fill="none" stroke="#faffff" stroke-width="3"/>
+ <path d="M341 375L611 264L880 375L608 502Z" fill="none" stroke="#36b3a8" stroke-width="12"/>
+</g>
+<g stroke="#5499b4" stroke-width="2" stroke-dasharray="5 8"><path d="M373 259V480M623 181V373M827 286V473M576 402V598"/></g>
+<g transform="translate(373 387)"><ellipse rx="15" ry="8" fill="#d8e7ef" stroke="#4a8b9d" stroke-width="2"/><path d="M-5 0H5" stroke="#3e687c" stroke-width="2"/></g><g transform="translate(623 288)"><ellipse rx="15" ry="8" fill="#d8e7ef" stroke="#4a8b9d" stroke-width="2"/><path d="M-5 0H5" stroke="#3e687c" stroke-width="2"/></g><g transform="translate(827 387)"><ellipse rx="15" ry="8" fill="#d8e7ef" stroke="#4a8b9d" stroke-width="2"/><path d="M-5 0H5" stroke="#3e687c" stroke-width="2"/></g><g transform="translate(576 491)"><ellipse rx="15" ry="8" fill="#d8e7ef" stroke="#4a8b9d" stroke-width="2"/><path d="M-5 0H5" stroke="#3e687c" stroke-width="2"/></g>
+<g fill="none" stroke="#759ebc" stroke-width="2"><path d="M891 286H1035M878 375H1035M890 505H1035"/></g>
+<g fill="#3f7398" font-family="system-ui, sans-serif" font-size="18"><text x="1052" y="291">01</text><text x="1052" y="381">02</text><text x="1052" y="511">03</text></g>
+<g fill="#5681a6" font-family="system-ui, sans-serif" font-size="14" letter-spacing="3"><text x="66" y="76">04 / ENCLOSURE ASSEMBLY</text><text x="944" y="731">SCHEMATIC</text></g>
+</svg>

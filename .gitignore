@@ -1,0 +1,16 @@
+.DS_Store
+.env
+.env.*
+*.key
+*.pem
+*.log
+*.stl
+*.step
+*.stp
+node_modules/
+__pycache__/
+private/
+data/
+outputs/
+test-results/
+playwright-report/

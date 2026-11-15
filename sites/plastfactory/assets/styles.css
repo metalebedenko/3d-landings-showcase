@@ -1,0 +1,574 @@
+/* ============================================================
+   PlastFactory — тема A (светлый минимализм) + адаптив
+   Источник дизайна: mockups/landing-1.html (десктоп 1440)
+   Шрифты: self-hosted Inter / Inter Tight (assets/fonts/fonts.css)
+   ============================================================ */
+
+/* ============ База ============ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{
+  background:#F4F5F7;
+  scroll-padding-top:96px;
+  scroll-behavior:smooth;
+  overflow-x:hidden;
+}
+body{
+  width:100%;
+  margin:0 auto;
+  background:#F4F5F7;color:#111418;
+  font-family:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:clamp(16px,1.05vw + 0.5rem,17px);line-height:1.55;font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+img{max-width:100%;height:auto}
+
+.wrap{
+  width:100%;max-width:1200px;margin-inline:auto;
+  padding-inline:clamp(16px,4vw,24px);
+}
+
+h1,h2{font-family:"Inter Tight","Inter",sans-serif;font-weight:800;letter-spacing:-0.02em}
+h1{font-size:clamp(32px,4.8vw,52px);line-height:1.06;text-wrap:balance}
+h2{font-size:clamp(26px,3.4vw,38px);line-height:1.12;max-width:24ch;text-wrap:balance}
+h3{font-size:clamp(17px,1.2vw,19px);line-height:1.3;font-weight:600;letter-spacing:-0.01em}
+
+.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.94em;font-weight:600}
+
+/* Skip-link (доступность §9) */
+.skip-link{
+  position:absolute;left:-9999px;top:0;z-index:200;
+  background:#2563EB;color:#FFFFFF;padding:12px 20px;border-radius:0 0 10px 0;
+  font-size:15px;font-weight:600;
+}
+.skip-link:focus{left:0}
+
+/* Видимый фокус для клавиатуры (§9) */
+:focus-visible{outline:2px solid #2563EB;outline-offset:2px;border-radius:4px}
+
+/* ============ Секции и ритм ============ */
+section{padding:clamp(56px,8vw,104px) 0}
+.s-white{background:#FFFFFF}
+.s-dark{background:#14181D;color:#FFFFFF}
+/* разделитель между двумя секциями одного фона (после переноса «Для кого») */
+.sec-div{border-top:1px solid #E8EAEE}
+.sec-head{margin-bottom:clamp(32px,5vw,56px)}
+.sec-head h2{margin-bottom:0}
+.sec-lead{margin-top:20px;max-width:65ch;color:#5A6472}
+
+/* ============ Кнопки ============ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:52px;padding:0 30px;border-radius:999px;
+  font-size:16px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;
+  cursor:pointer;border:none;font-family:inherit;
+}
+.btn-p{background:#2563EB;color:#FFFFFF}
+.btn-s{border:1.5px solid #2563EB;color:#2563EB;background:transparent}
+.btn-sm{min-height:44px;padding:0 24px;font-size:15px}
+
+/* ============ Карточки ============ */
+.card{
+  background:#FFFFFF;border:1px solid #E2E5EA;border-radius:14px;
+  padding:clamp(22px,3vw,32px);
+}
+
+/* ============ Иконки ============ */
+.i{width:24px;height:24px;fill:none;stroke:#2563EB;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i-s{width:20px;height:20px}
+.ic{
+  width:48px;height:48px;border-radius:12px;background:rgba(37,99,235,.07);
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+
+/* ============ Списки ============ */
+.dotl li{position:relative;padding-left:18px;margin-top:8px;color:#5A6472}
+.dotl li::before{
+  content:"";position:absolute;left:1px;top:.66em;width:6px;height:6px;border-radius:50%;background:#2563EB;
+}
+.dotl li:first-child{margin-top:0}
+.checkl li{display:flex;gap:12px;align-items:flex-start;margin-top:12px;font-weight:500}
+.checkl li:first-child{margin-top:0}
+.checkl .i-s{margin-top:2px}
+.numl{counter-reset:n}
+.numl li{position:relative;padding-left:38px;margin-top:12px;color:#3C4654}
+.numl li:first-child{margin-top:0}
+.numl li::before{
+  counter-increment:n;content:counter(n);position:absolute;left:0;top:0;
+  width:26px;height:26px;border-radius:50%;background:rgba(37,99,235,.09);color:#2563EB;
+  font-family:"Inter Tight",sans-serif;font-weight:800;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ============ Чипы ============ */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  display:inline-flex;align-items:center;min-height:40px;padding:8px 18px;
+  border:1px solid #E2E5EA;border-radius:999px;background:#FFFFFF;
+  font-size:15px;font-weight:500;color:#111418;
+}
+
+/* ============ Callout ============ */
+.callout{
+  border:1px solid #E2E5EA;border-left:3px solid #2563EB;border-radius:14px;
+  background:#FFFFFF;padding:28px clamp(22px,3vw,32px);
+}
+.callout .c-title{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#2563EB;margin-bottom:12px}
+
+/* ============ Шапка ============ */
+header{
+  position:sticky;top:0;z-index:50;
+  background:#FFFFFF;border-bottom:1px solid #E2E5EA;
+}
+.hd{min-height:80px;display:flex;align-items:center;gap:clamp(16px,2vw,32px)}
+.logo{display:flex;align-items:center;gap:11px}
+.logo-mark{
+  width:28px;height:28px;border-radius:8px;background:#2563EB;color:#FFFFFF;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Inter Tight",sans-serif;font-weight:800;font-size:15px;flex:none;
+}
+.logo-name{font-family:"Inter Tight",sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.02em}
+nav{display:flex;gap:clamp(12px,1.5vw,24px);margin:0 auto}
+nav a{font-size:15px;font-weight:500;color:#111418;padding:6px 0;white-space:nowrap}
+.hd-phone{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;white-space:nowrap}
+.hd-phone .i{width:18px;height:18px}
+
+/* Бургер — скрыт на десктопе */
+.burger{
+  display:none;width:44px;height:44px;border:1px solid #E2E5EA;border-radius:10px;
+  background:#FFFFFF;cursor:pointer;align-items:center;justify-content:center;flex:none;
+  margin-left:auto;
+}
+.burger svg{width:22px;height:22px;stroke:#111418;stroke-width:2;fill:none;stroke-linecap:round}
+
+/* ============ Hero ============ */
+.hero{padding:clamp(48px,7vw,96px) 0 clamp(56px,8vw,104px)}
+.hero-grid{display:grid;grid-template-columns:7fr 5fr;gap:clamp(32px,5vw,64px);align-items:start}
+.hero h1{margin-bottom:24px}
+.hero .sub{max-width:60ch;color:#3C4654}
+.hero .sub2{margin-top:14px;max-width:60ch;color:#5A6472;font-size:16px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.hero-note{margin-top:16px;font-size:15px;color:#5A6472;max-width:52ch}
+.hero-feats{margin-top:36px;padding-top:32px;border-top:1px solid #E2E5EA}
+.hero-feats li{font-size:16px}
+.hero-img.card{padding:14px}
+.hero-img img{display:block;width:100%;height:420px;object-fit:cover;border-radius:8px}
+.ph-cap{padding:14px 10px 6px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.ph-cap .cap{font-size:13px;color:#5A6472}
+.ph-cap .tag{font-size:11px;font-weight:600;letter-spacing:.08em;color:#8C95A3;text-transform:uppercase;white-space:nowrap}
+
+/* ============ [02] Проблема ============ */
+.prob-grid{display:grid;grid-template-columns:8fr 4fr;gap:clamp(32px,5vw,64px);align-items:stretch}
+.prob-grid .callout{display:flex;flex-direction:column;justify-content:center}
+.prob-text p{max-width:65ch;color:#3C4654}
+.prob-lead{margin:30px 0 14px;font-weight:600;color:#111418}
+.s-white .chip{background:#F4F5F7;border-color:#E2E5EA}
+
+/* ============ [03] Карточки деталей ============ */
+.parts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.part-card .ic{margin-bottom:20px}
+.part-card h3{margin-bottom:14px}
+.part-card .dotl li{font-size:15.5px;margin-top:7px}
+.warn-card{
+  grid-column:span 3;
+  display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start;
+  background:#F6F2E8;border-color:#E4DAC4;
+}
+.warn-card .warn-ic{
+  width:48px;height:48px;border-radius:12px;background:rgba(150,110,30,.12);
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+.warn-card .warn-ic .i{stroke:#8A6A1E}
+.warn-card .c-title{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8A6A1E;margin-bottom:12px}
+.warn-card h3{margin-bottom:14px;max-width:60ch}
+.warn-card .dotl{columns:2;column-gap:48px}
+.warn-card .dotl li{font-size:15.5px;margin-top:7px;color:#5A5240;break-inside:avoid}
+.warn-card .dotl li::before{background:#B79A5A}
+
+/* ============ [04] Услуги 3D-печати ============ */
+.print-lead{max-width:70ch;color:#3C4654;margin-top:18px;margin-bottom:14px}
+.print-cando{margin:32px 0 48px}
+.print-cando .lst-label{font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5A6472;margin-bottom:16px}
+.print-chips{display:flex;flex-wrap:wrap;gap:10px}
+.print-tech{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.print-tech .tag-tech{
+  display:inline-flex;align-items:center;height:30px;padding:0 14px;border-radius:999px;
+  background:rgba(37,99,235,.08);color:#1D4FC4;font-size:13px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;margin-bottom:18px;
+}
+.print-tech h3{font-family:"Inter Tight",sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.02em;margin-bottom:16px}
+.print-tech .lst-label{font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5A6472;margin-bottom:10px}
+.print-tech .dotl li{font-size:15.5px;margin-top:7px}
+.print-tech .mat-line{
+  margin-top:20px;padding-top:18px;border-top:1px solid #E2E5EA;
+  font-size:15px;color:#3C4654;
+}
+.print-tech .mat-line .mono{color:#111418}
+.print-compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.compare-card{padding:clamp(22px,3vw,32px)}
+.compare-card .ch{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.compare-card .ch h3{font-size:18px}
+.compare-card.print-side{border-top:3px solid #2563EB}
+.compare-card.cast-side{border-top:3px solid #8A6A1E}
+.compare-card.cast-side .ch .ic{background:rgba(150,110,30,.10)}
+.compare-card.cast-side .ch .i{stroke:#8A6A1E}
+.compare-card.cast-side .dotl li::before{background:#B79A5A}
+.compare-card .dotl li{font-size:15.5px;margin-top:9px}
+
+/* ============ [05] Что прислать ============ */
+.send-grid{display:grid;grid-template-columns:7fr 5fr;gap:clamp(32px,5vw,64px);align-items:stretch}
+.send-grid .callout{display:flex;flex-direction:column;justify-content:center}
+.send-items{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+.send-item{
+  display:flex;align-items:center;gap:14px;
+  background:#FFFFFF;border:1px solid #E2E5EA;border-radius:14px;padding:16px 20px;
+  font-size:15.5px;font-weight:500;
+}
+.send-item .ic{width:40px;height:40px;border-radius:10px}
+.send-item.full{grid-column:1/-1}
+
+/* ============ [06] Степпер ============ */
+.steps{display:flex;flex-direction:column}
+.step-row{display:grid;grid-template-columns:96px 1fr;gap:0 36px;padding-bottom:24px}
+.step-row:last-child{padding-bottom:0}
+.step-rail{position:relative;text-align:center}
+.step-rail::after{
+  content:"";position:absolute;left:50%;top:58px;bottom:-24px;width:1px;background:#D9DCE1;
+}
+.step-row:last-child .step-rail::after{bottom:0}
+.step{padding:32px 36px}
+.step-head{margin-bottom:12px}
+.step-num{
+  display:block;font-family:"Inter Tight",sans-serif;font-weight:800;font-size:40px;line-height:1.1;
+  color:#2563EB;letter-spacing:-0.02em;
+}
+.step h3{font-size:20px}
+.step p{color:#3C4654}
+.step .lst-label{margin-top:14px;font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5A6472}
+.step .dotl{margin-top:10px}
+.step .dotl li{font-size:15.5px;margin-top:6px}
+.step-wide{display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:center}
+.step-wide-img{border:1px solid #E2E5EA;border-radius:14px;overflow:hidden;flex:none}
+.step-wide-img img{display:block;width:100%;height:200px;object-fit:cover}
+.step-plaque{
+  display:flex;align-items:flex-start;gap:14px;
+  background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.18);border-radius:14px;
+  padding:22px 24px;font-size:16px;font-weight:600;color:#1D4FC4;
+}
+.step-plaque .i{margin-top:1px}
+
+/* ============ [07] Выбор технологии ============ */
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.tech-card .ov{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5A6472;margin-bottom:10px}
+.tech-card h3{font-family:"Inter Tight",sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.02em;margin-bottom:18px}
+.tech-card .lst-label{font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#5A6472;margin-bottom:10px}
+.tech-card .dotl li{font-size:15.5px;margin-top:7px}
+.tech-combo{margin-top:24px;display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;padding:36px 40px}
+.tech-combo .lst-label{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#2563EB;margin-bottom:8px}
+.tech-combo h3{font-family:"Inter Tight",sans-serif;font-weight:700;font-size:24px;letter-spacing:-0.02em}
+.tech-combo .numl{display:grid;grid-auto-flow:column;grid-template-rows:repeat(3,auto);grid-template-columns:1fr 1fr;gap:18px 48px}
+/* равные расстояния: интервал задаёт грид-гэп, убираем margin у пунктов */
+.tech-combo .numl li{margin-top:0}
+
+/* ============ [08] Материалы ============ */
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.mat-card h3{margin-bottom:18px}
+.mat-card .dotl li{margin-top:9px}
+.mat-card .mono{color:#111418}
+.mat-card .matn{font-weight:600;color:#111418}
+.mat-callout .cond{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:6px}
+
+/* ============ [09] Аудитории ============ */
+.aud-rows{border-top:1px solid #E2E5EA}
+.aud-row{
+  display:grid;grid-template-columns:48px 360px 1fr;gap:32px;align-items:center;
+  padding:28px 0;border-bottom:1px solid #E2E5EA;
+}
+.aud-row h3{font-size:20px}
+.aud-row p{color:#5A6472}
+
+/* ============ [10] Преимущества ============ */
+.adv-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:24px}
+.adv-card{grid-column:span 2}
+.adv-card.wide{grid-column:span 3}
+.adv-card .ic{margin-bottom:20px}
+.adv-card h3{margin-bottom:10px}
+.adv-card p{color:#5A6472;font-size:16px}
+
+/* ============ [11] Производство ============ */
+.prod-grid{display:grid;grid-template-columns:7fr 5fr;gap:clamp(32px,5vw,64px);align-items:start}
+.prod-grid .lead{color:#3C4654;max-width:60ch}
+.prod-grid .lst-label{margin:28px 0 12px;font-weight:600;color:#111418}
+.prod-grid .dotl li{margin-top:8px}
+.prod-close{
+  margin-top:28px;padding:22px 26px;background:#F4F5F7;border-radius:14px;
+  font-weight:600;font-size:16.5px;
+}
+.prod-img.card{padding:14px}
+.prod-img img{display:block;width:100%;height:440px;object-fit:cover;border-radius:8px}
+
+/* ============ [12] Цены ============ */
+.price-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,64px);align-items:stretch}
+.price-grid > :first-child{display:flex;flex-direction:column;justify-content:center}
+.price-grid .lst-label{margin:0 0 14px;font-weight:600}
+.price-factors{display:grid;grid-template-columns:1fr;gap:0}
+.price-card{padding:12px 28px}
+.price-row{
+  display:flex;align-items:baseline;gap:16px;padding:19px 0;border-top:1px solid #E2E5EA;
+}
+.price-row:first-child{border-top:none}
+.price-row .nm{font-weight:500}
+.price-row .dots{flex:1;border-bottom:1px dotted #C6CBD4;transform:translateY(-4px)}
+.price-row .val{font-family:"Inter Tight",sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.01em;white-space:nowrap}
+.price-row .val-text{font-size:15px;font-weight:500;color:#5A6472;text-align:right;max-width:34ch;white-space:normal}
+.price-row.free{
+  margin:8px -16px;padding:19px 16px;border-top:none;border-radius:10px;
+  background:rgba(37,99,235,.06);
+}
+.price-row.free + .price-row{border-top:none}
+.price-row.free .nm{font-weight:600;color:#1D4FC4}
+.price-row.free .val{color:#2563EB}
+.price-note{margin-top:18px;font-size:14px;color:#5A6472}
+
+/* Мобильная обёртка для таблицы цен — горизонтальный скролл с тенью-подсказкой */
+.price-scroll{position:relative}
+
+/* ============ CTA-полоса ============ */
+.cta-sec{padding:clamp(40px,6vw,72px) 0}
+.cta-strip{
+  display:flex;align-items:center;gap:0;
+  padding:0;overflow:hidden;
+}
+.cta-strip-img{flex:none;width:200px;align-self:stretch}
+.cta-strip-img img{display:block;width:200px;height:100%;min-height:110px;object-fit:cover;object-position:center}
+.cta-strip p{font-size:18px;font-weight:500;max-width:56ch;padding:30px 36px}
+.cta-strip .btn{margin-right:36px;flex:none}
+
+/* ============ [13] Форма ============ */
+.form-grid{display:grid;grid-template-columns:5fr 7fr;gap:clamp(32px,5vw,64px);align-items:start}
+.form-left h2{margin-bottom:20px}
+.form-left .promise{color:#3C4654;max-width:46ch}
+.form-left .checkl{margin-top:32px;padding-top:28px;border-top:1px solid #E2E5EA}
+.form-aside{
+  margin-top:28px;padding:18px 22px;background:#F4F5F7;border-radius:12px;
+  font-size:14.5px;color:#3C4654;display:flex;gap:12px;align-items:flex-start;
+}
+.form-aside .i{margin-top:1px;flex:none}
+.form-card{padding:clamp(24px,3vw,40px)}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.f-field{display:flex;flex-direction:column;gap:8px}
+.f-field.full{grid-column:1/-1}
+.f-field label{font-size:14px;font-weight:600;color:#111418}
+.req{color:#2563EB}
+.inp{
+  width:100%;min-height:52px;padding:0 16px;font:inherit;font-size:16px;color:#111418;
+  background:#FFFFFF;border:1px solid #D7DCE3;border-radius:10px;
+}
+.inp::placeholder{color:#9AA3AF}
+.inp.is-invalid{border-color:#DC2626;background:#FEF2F2}
+select.inp{appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%235A6472' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;padding-right:44px;}
+textarea.inp{min-height:96px;padding:13px 16px;resize:vertical}
+.tg-hint{
+  grid-column:1/-1;display:flex;gap:14px;align-items:flex-start;
+  border:1px dashed #B9C2CE;border-radius:12px;background:#F8F9FB;padding:18px 22px;
+}
+.tg-hint .ic{width:40px;height:40px;border-radius:10px}
+.tg-hint .h1t{font-size:15.5px;font-weight:600}
+.tg-hint .h2t{margin-top:4px;font-size:14px;color:#5A6472}
+.f-submit{width:100%;font-size:17px}
+.f-sub-note{grid-column:1/-1;margin-top:-6px;font-size:13.5px;color:#5A6472;text-align:center}
+/* Статус-сообщения lead.js */
+.lead-note{grid-column:1/-1;font-size:14px;font-weight:500;min-height:0}
+.lead-note:empty{display:none}
+.lead-note[data-kind="ok"]{color:#15803D}
+.lead-note[data-kind="warn"]{color:#B45309}
+.lead-fallback{grid-column:1/-1;width:100%;min-height:120px;margin-top:4px;
+  padding:13px 16px;font:inherit;font-size:14px;color:#111418;
+  background:#F8F9FB;border:1px solid #D7DCE3;border-radius:10px;resize:vertical}
+
+/* ============ [14] FAQ ============ */
+.faq-list{border-top:1px solid #E2E5EA;max-width:980px}
+.faq-item{
+  border-bottom:1px solid #E2E5EA;
+}
+.faq-item summary{
+  display:grid;grid-template-columns:64px 1fr 24px;gap:24px;align-items:start;
+  padding:30px 0;cursor:pointer;list-style:none;
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-num{
+  font-family:"Inter Tight",sans-serif;font-weight:800;font-size:16px;color:#2563EB;
+  letter-spacing:.04em;padding-top:3px;
+}
+.faq-item summary h3{font-size:20px}
+.faq-chevron{width:24px;height:24px;stroke:#5A6472;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .2s ease;margin-top:3px}
+.faq-item[open] .faq-chevron{transform:rotate(180deg)}
+.faq-answer{padding:0 24px 30px calc(64px + 24px)}
+.faq-answer p{color:#5A6472;max-width:68ch}
+
+/* ============ [15] Финальный призыв ============ */
+.final{padding:clamp(56px,7vw,96px) 0}
+.final-inner{max-width:760px}
+.final h2{color:#FFFFFF;margin-bottom:20px}
+.final p{color:#AEB6C2;max-width:62ch}
+.final .btn{margin-top:36px}
+.final-note{margin-top:24px;font-size:15px;color:#8C95A3;max-width:58ch}
+
+/* ============ Футер ============ */
+footer{background:#14181D;color:#AEB6C2;border-top:1px solid rgba(255,255,255,.08)}
+.ft{display:grid;grid-template-columns:5fr 3fr 4fr;gap:48px;padding:72px 0 56px}
+.ft h4{
+  font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#7B8694;margin-bottom:18px;
+}
+.ft-brand .logo-name{color:#FFFFFF}
+.ft-brand p{margin-top:18px;font-size:15px;max-width:36ch}
+.ft-req{margin-top:18px;font-size:14px;color:#7B8694;line-height:1.7}
+.ft ul li{margin-top:10px}
+.ft ul li:first-child{margin-top:0}
+.ft a{color:#DFE3E9;font-size:15px}
+.ft .ft-pol{color:#AEB6C2;text-decoration:underline;text-underline-offset:3px}
+.ft-phone{font-family:"Inter Tight",sans-serif;font-weight:700;font-size:20px;color:#FFFFFF;letter-spacing:-0.01em}
+.ft-hours{margin-top:12px;font-size:14px;color:#AEB6C2}
+.ft-contacts li{margin-top:12px}
+.ft-bottom{
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:24px 0;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
+  font-size:14px;color:#7B8694;
+}
+
+/* ============================================================
+   АДАПТИВ
+   ============================================================ */
+
+/* ≤1024 — сжимаем «тяжёлые» сетки */
+/* телефон-плейсхолдер прячем на средних ширинах, чтобы меню оставалось в одну строку */
+@media (max-width:1200px){
+  .hd-phone{display:none}
+}
+
+@media (max-width:1024px){
+  .adv-grid{grid-template-columns:repeat(4,1fr)}
+  .adv-card{grid-column:span 2}
+  .adv-card.wide{grid-column:span 2}
+  .aud-row{grid-template-columns:48px 1fr;gap:16px 24px}
+  .aud-row p{grid-column:2}
+  .tech-combo{grid-template-columns:1fr;gap:20px}
+  .step-num{font-size:34px}
+
+  /* Шапка → бургер (длинные пункты меню не помещаются в одну строку ниже 1024) */
+  .hd{gap:16px;min-height:64px}
+  nav{
+    position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;gap:0;margin:0;
+    background:#FFFFFF;border-bottom:1px solid #E2E5EA;
+    padding:8px 0;
+    box-shadow:0 12px 24px rgba(17,20,24,.08);
+    display:none;
+  }
+  nav.is-open{display:flex}
+  nav a{padding:14px clamp(16px,4vw,24px);min-height:44px;display:flex;align-items:center;border-top:1px solid #F1F3F6;white-space:normal}
+  nav a:first-child{border-top:none}
+  .hd .btn-sm{display:none}
+  .burger{display:flex}
+}
+
+/* ≤768 — планшет/мобайл: многоколоночные → 1-2 колонки, бургер */
+@media (max-width:768px){
+  /* Hero */
+  .hero-grid{grid-template-columns:1fr;gap:32px}
+  .hero-img img{height:auto;aspect-ratio:4/3}
+
+  /* Сетки */
+  .prob-grid{grid-template-columns:1fr;gap:28px}
+  .parts-grid{grid-template-columns:repeat(2,1fr)}
+  .warn-card{grid-column:span 2}
+  .print-tech{grid-template-columns:1fr}
+  .print-compare{grid-template-columns:1fr}
+  .send-grid{grid-template-columns:1fr}
+  .send-items{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:1fr}
+  .mat-grid{grid-template-columns:1fr}
+  .mat-callout .cond{grid-template-columns:1fr}
+  .adv-grid{grid-template-columns:repeat(2,1fr)}
+  .adv-card,.adv-card.wide{grid-column:span 1}
+  .prod-grid{grid-template-columns:1fr;gap:28px}
+  .prod-img img{height:auto;aspect-ratio:16/10}
+  .price-grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .form-grid{grid-template-columns:1fr;gap:28px}
+  .warn-card .dotl{columns:1}
+  .numl[style]{grid-template-columns:1fr !important}
+  .tech-combo .numl{grid-template-columns:1fr}
+
+  /* Степпер: убираем рельс-колонку, номер инлайн */
+  .step-row{grid-template-columns:1fr;gap:0}
+  .step-rail{display:none}
+  .step{padding:24px}
+  .step-wide{grid-template-columns:1fr;gap:24px}
+  .step-wide-img img{height:auto;aspect-ratio:16/9}
+
+  /* CTA-полоса: картинка сверху */
+  .cta-strip{flex-direction:column;align-items:stretch}
+  .cta-strip-img{width:100%}
+  .cta-strip-img img{width:100%;height:160px}
+  .cta-strip p{padding:24px 24px 8px}
+  .cta-strip .btn{margin:0 24px 24px;align-self:flex-start}
+
+  /* Цены: горизонтальный скролл с тенью-подсказкой */
+  .price-scroll{
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    background:
+      linear-gradient(to right,#FFFFFF 30%,rgba(255,255,255,0)),
+      linear-gradient(to right,rgba(255,255,255,0),#FFFFFF 70%) 100% 0,
+      radial-gradient(farthest-side at 0 50%,rgba(17,20,24,.12),rgba(0,0,0,0)),
+      radial-gradient(farthest-side at 100% 50%,rgba(17,20,24,.12),rgba(0,0,0,0)) 100% 0;
+    background-repeat:no-repeat;
+    background-size:40px 100%,40px 100%,14px 100%,14px 100%;
+    background-attachment:local,local,scroll,scroll;
+    border-radius:14px;
+  }
+  .price-scroll .price-card{min-width:460px}
+
+  /* Футер */
+  .ft{grid-template-columns:1fr 1fr;gap:32px 24px;padding:48px 0 40px}
+  .ft-brand{grid-column:1/-1}
+}
+
+/* ≤480 — телефон: всё в одну колонку */
+@media (max-width:480px){
+  .parts-grid{grid-template-columns:1fr}
+  .warn-card{grid-column:span 1;grid-template-columns:1fr;gap:16px}
+  .adv-grid{grid-template-columns:1fr}
+  .ft{grid-template-columns:1fr}
+  .hero-cta .btn{width:100%}
+  .faq-item summary{grid-template-columns:auto 1fr 24px;gap:14px}
+  .faq-answer{padding-left:0}
+  .step-plaque{padding:18px 20px}
+  .tech-combo{padding:24px}
+}
+
+/* Уважаем prefers-reduced-motion */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .faq-chevron{transition:none}
+}
+
+/* Portfolio demo: separate context from the original landing-page design. */
+.demo-banner{background:#111827;color:#f8fafc;border-bottom:1px solid #334155;font:13px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.demo-banner__inner{max-width:1240px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px 24px}
+.demo-banner strong{font-weight:700;color:#fff}
+.demo-banner a{color:#fff;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.demo-banner a:focus-visible{outline:2px solid #93c5fd;outline-offset:4px}
+.demo-preview{grid-column:1/-1;width:100%;margin-top:16px;padding:20px;border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;color:#172033;overflow-wrap:anywhere}
+.demo-preview[hidden]{display:none}
+.demo-preview h3{margin:0 0 12px;font-size:18px;color:inherit}
+.demo-preview pre{margin:0;white-space:pre-wrap;font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;color:inherit;overflow-wrap:anywhere}
+.demo-preview p,.demo-noscript{margin:12px 0 0;font-size:13px;line-height:1.6;color:#475569}
+.demo-preview:focus{outline:2px solid #2563eb;outline-offset:3px}
+.demo-noscript{grid-column:1/-1;padding:12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px}
+@media(max-width:640px){.demo-banner__inner{align-items:flex-start;flex-direction:column;gap:6px;padding:12px 16px}.demo-preview{padding:16px}}

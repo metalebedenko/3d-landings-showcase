@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Демо-калькулятор производства</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+         color:#14181d;background:#f4f5f7;padding:clamp(16px,4vw,40px)}
+    main{max-width:1100px;margin:0 auto;background:#fff;border:1px solid #e2e5ea;
+         border-radius:12px;padding:clamp(16px,3vw,28px)}
+    h1{font-size:clamp(22px,3.5vw,30px);margin:0 0 8px;letter-spacing:-.02em}
+    .muted{color:#5a6472;font-size:14px;margin-bottom:20px}
+    .back{display:inline-block;margin-top:24px;color:#2257e7}
+    iframe{display:block;width:100%;border:0;min-height:1050px}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Демо-калькулятор производства</h1>
+    <p class="muted">Портфолио-прототип · условные ставки · обработка STL только в браузере</p>
+    <iframe
+      id="ai-calc"
+      src="kalkulyator.html"
+      loading="lazy"
+      title="Демо-калькулятор производства">
+    </iframe>
+    <a class="back" href="../index.html">← На главную</a>
+  </main>
+  <script>
+  (function(){
+    var f=document.getElementById('ai-calc');
+    function fit(){ try{ var d=f.contentWindow.document.body;
+      if(d){ f.style.height=(d.scrollHeight+20)+'px'; } }catch(e){} }
+    f.addEventListener('load',function(){ fit(); setTimeout(fit,400); setTimeout(fit,1500); });
+    window.addEventListener('resize',fit);
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Демо-калькулятор производства</title>
+<script>
+// Illustrative defaults only. These values are not verified market quotes.
+window.RATES = {
+  meta: { currency: '₽', note: 'Демонстрационные ставки, не рыночные котировки.' },
+  print: {
+    FDM: { base: 30, min_order: 1000, materials: {'Стандартный пластик': {k:1}, 'Инженерный пластик': {k:2}} },
+    SLA: { base: 80, min_order: 1500, materials: {'Стандартная смола': {k:1}, 'Инженерная смола': {k:1.4}} },
+    SLS: { base: 100, min_order: 3000, materials: {'Полиамид': {k:1}, 'Наполненный полиамид': {k:1.8}} },
+    SLM: { base: 1000, min_order: 5000, materials: {'Алюминий': {k:1}, 'Сталь': {k:1.05}, 'Титан': {k:2.3}} }
+  },
+  silicone: {
+    cast_rate: {base:12}, materials: {'Стандартный ПУ': {k:1}, 'Специальный ПУ': {k:1.5}},
+    form: {base:2000, yield:20, size_coef:{'до 100 мм':1, '100-250 мм':1.8, '250-500 мм':3}},
+    master_model: {base:3000, print_mode:{density_factor:1.3}}, min_order:10000
+  },
+  modifiers: {
+    complexity: {options:{'Простая':1, 'Средняя':1.3, 'Сложная':1.7}},
+    urgency: {options:{'Стандарт':1, 'Срочно (×1.5)':1.5}},
+    postprocessing: {rate:1500}
+  },
+  digitize: {scan:{base:3000}, reverse:{base:6000}},
+  density: {FDM:1.1, SLA:1.15, SLS:0.98, silicone_cast:1.12, SLM:{'Алюминий':2.67, 'Сталь':7.99, 'Титан':4.43}},
+  build_zone: {FDM:300, SLA:250, SLS:340, SLM:250, 'Литьё в силикон':500}
+};
+</script>
+<style>
+  :root{
+    --navy:#142240; --blue:#2563EB; --bg:#F4F6FA; --card:#fff; --line:#E3E8F0;
+    --ink:#1b2436; --muted:#6b7690; --ok:#128a5b; --warn:#b26a00; --hyp:#8a5cf6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  .wrap{max-width:980px;margin:0 auto;padding:24px}
+  h1{font-size:24px;margin:0 0 4px;color:var(--navy)}
+  .sub{color:var(--muted);margin:0 0 20px;font-size:13px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .card h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+  label{display:block;font-size:13px;color:var(--muted);margin:12px 0 4px}
+  select,input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:15px;background:#fff}
+  .row{display:flex;gap:10px}.row>div{flex:1}
+  .tech{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+  .tech button{flex:1 1 30%;padding:10px 6px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font-size:14px;color:var(--ink)}
+  .tech button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .price{font-size:32px;font-weight:700;color:var(--navy);margin:4px 0}
+  .perpiece{font-size:15px;color:var(--muted);margin-bottom:10px}
+  .break{font-size:13px;background:#fafbfe;border:1px dashed var(--line);border-radius:9px;padding:12px;margin-top:8px}
+  .break div{display:flex;justify-content:space-between;padding:3px 0}
+  .break .tot{border-top:1px solid var(--line);margin-top:6px;padding-top:6px;font-weight:600;color:var(--navy)}
+  .tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:20px;margin-left:6px}
+  .tag.market{background:#e6f6ee;color:var(--ok)} .tag.hyp{background:#efe9fd;color:var(--hyp)}
+  .note{font-size:12px;color:var(--muted);margin-top:10px}
+  .warn{background:#fff6e9;border:1px solid #ffd9a0;color:var(--warn);border-radius:9px;padding:10px 12px;font-size:13px;margin-top:10px}
+  .src{font-size:11px;color:var(--muted);margin-top:4px}
+  a{color:var(--blue)}
+  .hidden{display:none}
+  /* drop zone */
+  .drop{border:2px dashed #c4ccdb;border-radius:11px;padding:16px;text-align:center;cursor:pointer;background:#fbfcfe;transition:.15s}
+  .drop.hover{border-color:var(--blue);background:#eef3ff}
+  .drop b{color:var(--navy)} .drop small{color:var(--muted);display:block;margin-top:3px}
+  .meshinfo{font-size:12.5px;background:#eef7f1;border:1px solid #bfe3cd;border-radius:9px;padding:9px 11px;margin-top:9px;color:#155e3f}
+  .meshinfo span{display:inline-block;margin-right:12px}
+  .meshwarn{background:#fff6e9;border-color:#ffd9a0;color:var(--warn)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Демо-калькулятор производства</h1>
+  <p class="sub">Портфолио-прототип с условными ставками. Показывает логику расчёта, не является прайсом или коммерческим предложением. Файлы обрабатываются в браузере и никуда не отправляются.</p>
+
+  <div class="grid">
+    <!-- ВВОД -->
+    <div class="card">
+      <h2>Параметры</h2>
+      <div class="tech" id="techBtns"></div>
+      <div class="src" id="techSrc"></div>
+
+      <!-- Загрузка 3D-модели -->
+      <label for="file">3D-модель: приблизительный объём из STL</label>
+      <div class="drop" id="drop" role="button" tabindex="0" aria-label="Выбрать STL-файл">
+        <b>Перетащите STL сюда</b> или нажмите, чтобы выбрать
+        <small>STL в миллиметрах, до 10 МиБ и 50 000 треугольников. Одна замкнутая оболочка.</small>
+        <input type="file" id="file" accept=".stl" class="hidden">
+      </div>
+      <div id="meshInfo" role="status" aria-live="polite"></div>
+
+      <!-- Оценщик объёма из примитива (для клиентов без STL) -->
+      <details id="shapeBox" style="margin-top:10px">
+        <summary style="cursor:pointer;font-size:13px;color:var(--blue)">Нет STL? Оценить объём по форме детали</summary>
+        <div style="border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:8px">
+          <label>Форма</label>
+          <select id="shape">
+            <option value="box">Параллелепипед / куб</option>
+            <option value="sphere">Шар</option>
+            <option value="ellipsoid">Эллипсоид</option>
+            <option value="cylinder">Цилиндр</option>
+          </select>
+          <div class="row" id="dimsRow" style="margin-top:8px"></div>
+          <label>Толщина стенки, мм <span class="src">(0 = сплошная деталь)</span></label>
+          <input type="number" id="wall" min="0" max="5000" step="0.5" value="0">
+          <button id="calcVol" type="button" style="margin-top:10px;width:100%;padding:9px;border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;cursor:pointer">Посчитать объём → подставить</button>
+          <div id="shapeOut" class="src" style="margin-top:6px"></div>
+        </div>
+      </details>
+
+      <div id="volBlock">
+        <label>Объём детали, см³ <span id="volHint" class="src"></span></label>
+        <input type="number" id="vol" min="0.000001" max="1000000" step="any" value="50">
+      </div>
+
+      <div id="fillBlock">
+        <label>Заполнение (инфилл), % <span class="tag hyp">оценка</span> <span class="src">только печать; 100 = сплошное</span></label>
+        <input type="number" id="fill" min="10" max="100" step="5" value="100">
+      </div>
+
+      <label for="rate">Демо-ставка, ₽/см³ <span class="tag hyp">условное значение</span></label>
+      <input type="number" id="rate" min="0.01" max="1000000" step="any" value="100">
+      <label>Материал</label>
+      <select id="mat"></select>
+
+      <!-- Литьё -->
+      <div id="castFields" class="hidden">
+        <div class="row">
+          <div><label>Тираж, шт</label><input type="number" id="qty" min="1" max="100000" step="1" value="30"></div>
+          <div><label>Размер (наиб. сторона)</label>
+            <select id="size">
+              <option value="до 100 мм">до 100 мм</option>
+              <option value="100-250 мм">100–250 мм</option>
+              <option value="250-500 мм">250–500 мм</option>
+            </select>
+          </div>
+        </div>
+        <label><input type="checkbox" id="hasMaster" style="width:auto;margin-right:6px">Есть готовая мастер-модель / деталь</label>
+        <label>Стоимость мастер-модели <span class="tag hyp">гипотеза</span></label>
+        <select id="masterMode">
+          <option value="fixed">Фикс. 3000 ₽</option>
+          <option value="print">По печати мастера (SLA, высокоточный принтер)</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div><label>Сложность <span class="tag hyp">гипотеза</span></label>
+          <select id="cx"></select></div>
+        <div><label>Срочность <span class="tag hyp">гипотеза</span></label>
+          <select id="ur"></select></div>
+      </div>
+
+      <div id="ppBlock">
+        <label>Постобработка, часов (1500 ₽/час)</label>
+        <input type="number" id="pp" min="0" max="10000" step="0.5" value="0">
+      </div>
+
+      <label style="margin-top:14px">Оцифровка (опция)</label>
+      <label><input type="checkbox" id="addScan" style="width:auto;margin-right:6px">3D-сканирование (3 000 ₽)</label>
+      <label><input type="checkbox" id="addRev" style="width:auto;margin-right:6px">Реверс-инжиниринг / CAD (6 000 ₽)</label>
+    </div>
+
+    <!-- РЕЗУЛЬТАТ -->
+    <div class="card">
+      <h2>Расчёт</h2>
+      <div class="price" id="price" aria-live="polite">—</div>
+      <div class="perpiece" id="perpiece"></div>
+      <div class="break" id="break"></div>
+      <div id="warnBox"></div>
+      <div class="note" id="basis"></div>
+    </div>
+  </div>
+
+  <p class="note">Все ставки, минимальные суммы, коэффициенты и ресурс формы здесь — демонстрационные допущения. При расчёте печати заполнение линейно уменьшает объём: оболочки, поддержки, отходы, время оборудования и реальные свойства материала не моделируются. STL не хранит единицы: предполагаются миллиметры. Проверяется замкнутость и согласованность рёбер одной оболочки; самопересечения и пригодность к производству не проверяются. Для рабочего расчёта нужны слайсер, актуальные ставки и проверка специалистом.</p>
+</div>
+
+<script>
+'use strict';
+const R = window.RATES;
+const LIMITS = Object.freeze({fileBytes:10*1024*1024, triangles:50000, coordinate:1000000, dimension:10000, volume:1000000, total:1e12});
+
+function boundedNumber(value, min, max, label, integer=false) {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < min || value > max || (integer && !Number.isInteger(value))) {
+    throw new Error(`${label}: укажите ${integer ? 'целое ' : ''}число от ${min} до ${max}.`);
+  }
+  return value;
+}
+function roundSum(value) {
+  boundedNumber(value, 0, LIMITS.total, 'Сумма');
+  const step = value < 5000 ? 50 : 100;
+  return boundedNumber(Math.round(value/step)*step, 0, LIMITS.total, 'Округлённая сумма');
+}
+function shapeVolume(kind, dims, wall) {
+  const sizes = {box:3, sphere:1, ellipsoid:3, cylinder:2};
+  if (!Object.hasOwn(sizes, kind) || dims.length !== sizes[kind]) throw new Error('Неизвестная форма детали.');
+  dims.forEach(v=>boundedNumber(v, 0.01, LIMITS.dimension, 'Габарит'));
+  boundedNumber(wall, 0, Math.min(...dims)/2, 'Толщина стенки');
+  const full = d=>kind==='box' ? d[0]*d[1]*d[2] : kind==='sphere' ? Math.PI*d[0]**3/6 : kind==='ellipsoid' ? Math.PI*d[0]*d[1]*d[2]/6 : Math.PI*d[0]**2*d[1]/4;
+  const mm3 = full(dims) - (wall>0 ? full(dims.map(v=>Math.max(0,v-2*wall))) : 0);
+  return boundedNumber(mm3/1000, 0.000001, LIMITS.volume, 'Объём');
+}
+
+// Bounded, strict STL parser. It supports one closed, consistently wound shell;
+// it does not prove that the surface is free of self-intersections.
+function parseSTL(buffer) {
+  if (!(buffer instanceof ArrayBuffer)) throw new Error('Ожидался STL-файл.');
+  if (buffer.byteLength < 15 || buffer.byteLength > LIMITS.fileBytes) throw new Error('STL должен быть непустым и не больше 10 МиБ.');
+  let sum=0, correction=0, origin=null, triangles=0;
+  const min=[Infinity,Infinity,Infinity], max=[-Infinity,-Infinity,-Infinity], edges=new Map(), parents=[];
+  function root(i) { while(parents[i]!==i) { parents[i]=parents[parents[i]]; i=parents[i]; } return i; }
+  function edge(a,b,triangle) {
+    const ka=a.join(','), kb=b.join(',');
+    if (ka===kb) throw new Error('STL содержит вырожденный треугольник.');
+    const forward=ka<kb, key=forward ? ka+'|'+kb : kb+'|'+ka;
+    const previous=edges.get(key);
+    if (!previous) edges.set(key,{count:1, winding:forward?1:-1, triangle});
+    else {
+      previous.count++;
+      if (previous.count>2) throw new Error('STL содержит ребро более чем у двух треугольников.');
+      previous.winding += forward?1:-1;
+      parents[root(triangle)]=root(previous.triangle);
+    }
+  }
+  function addTriangle(v) {
+    if (triangles >= LIMITS.triangles) throw new Error('В STL больше 50 000 треугольников.');
+    v.forEach(n=>boundedNumber(n,-LIMITS.coordinate,LIMITS.coordinate,'Координата STL'));
+    const a=v.slice(0,3),b=v.slice(3,6),c=v.slice(6,9);
+    const ab=b.map((x,i)=>x-a[i]), ac=c.map((x,i)=>x-a[i]);
+    const cross=[ab[1]*ac[2]-ab[2]*ac[1],ab[2]*ac[0]-ab[0]*ac[2],ab[0]*ac[1]-ab[1]*ac[0]];
+    if (!cross.some(x=>Math.abs(x)>1e-12)) throw new Error('STL содержит вырожденный треугольник.');
+    if (!origin) origin=a;
+    const ar=a.map((x,i)=>x-origin[i]),br=b.map((x,i)=>x-origin[i]),cr=c.map((x,i)=>x-origin[i]);
+    const value=ar[0]*(br[1]*cr[2]-br[2]*cr[1])-ar[1]*(br[0]*cr[2]-br[2]*cr[0])+ar[2]*(br[0]*cr[1]-br[1]*cr[0]);
+    if (!Number.isFinite(value)) throw new Error('Нечисловой объём STL.');
+    const y=value-correction, next=sum+y; correction=(next-sum)-y; sum=next;
+    for (const p of [a,b,c]) for(let i=0;i<3;i++) { min[i]=Math.min(min[i],p[i]); max[i]=Math.max(max[i],p[i]); }
+    parents.push(triangles);
+    edge(a,b,triangles); edge(b,c,triangles); edge(c,a,triangles);
+    triangles++;
+  }
+  const view=new DataView(buffer), count=buffer.byteLength>=84 ? view.getUint32(80,true) : 0;
+  const binary=buffer.byteLength>=84 && 84+count*50===buffer.byteLength;
+  if (binary) {
+    boundedNumber(count, 4, LIMITS.triangles, 'Число треугольников');
+    for(let t=0;t<count;t++) {
+      const offset=84+t*50;
+      for(let n=0;n<3;n++) boundedNumber(view.getFloat32(offset+n*4,true),-LIMITS.coordinate,LIMITS.coordinate,'Нормаль STL');
+      const vertices=[];
+      for(let n=0;n<9;n++) vertices.push(view.getFloat32(offset+12+n*4,true));
+      addTriangle(vertices);
+    }
+  } else {
+    let text;
+    try { text=new TextDecoder('utf-8',{fatal:true}).decode(buffer); }
+    catch { throw new Error('Неверная длина бинарного STL или недопустимый ASCII STL.'); }
+    if (/[^\x09\x0a\x0d\x20-\x7e]/.test(text)) throw new Error('Неверная длина бинарного STL или недопустимый ASCII STL.');
+    const number='[-+]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][-+]?\\d+)?';
+    const normal=new RegExp('^facet\\s+normal\\s+('+number+')\\s+('+number+')\\s+('+number+')$','i');
+    const vertex=new RegExp('^vertex\\s+('+number+')\\s+('+number+')\\s+('+number+')$','i');
+    const lines=/[^\r\n]*(?:\r\n|\r|\n|$)/g;
+    let state='start', values=[], lineCount=0, match;
+    while ((match=lines.exec(text)) && match[0] !== '') {
+      if (++lineCount > LIMITS.triangles*8+10 || match[0].length>1024) throw new Error('Слишком много строк или слишком длинная строка ASCII STL.');
+      const line=match[0].trim();
+      if (!line) continue;
+      if (state==='start' && /^solid(?:\s+.*)?$/i.test(line)) { state='facet'; continue; }
+      if (state==='facet' && /^endsolid(?:\s+.*)?$/i.test(line)) { state='done'; continue; }
+      const n=state==='facet' ? normal.exec(line) : null;
+      if (n) { n.slice(1).map(Number).forEach(x=>boundedNumber(x,-LIMITS.coordinate,LIMITS.coordinate,'Нормаль STL')); state='loop'; continue; }
+      if (state==='loop' && /^outer\s+loop$/i.test(line)) { values=[]; state='vertex'; continue; }
+      const v=state==='vertex' ? vertex.exec(line) : null;
+      if (v) { values.push(...v.slice(1).map(Number)); if(values.length===9)state='endloop'; continue; }
+      if (state==='endloop' && /^endloop$/i.test(line)) { state='endfacet'; continue; }
+      if (state==='endfacet' && /^endfacet$/i.test(line)) { addTriangle(values); state='facet'; continue; }
+      throw new Error(`Нарушена структура ASCII STL (строка ${lineCount}).`);
+    }
+    if (state!=='done') throw new Error('ASCII STL обрывается до endsolid.');
+  }
+  boundedNumber(triangles,4,LIMITS.triangles,'Число треугольников');
+  for (const e of edges.values()) if(e.count!==2 || e.winding!==0) throw new Error('STL должен быть замкнутым, с согласованным направлением треугольников.');
+  const shell=root(0);
+  for(let i=1;i<triangles;i++) if(root(i)!==shell) throw new Error('Поддерживается одна связная оболочка STL.');
+  const dims=max.map((x,i)=>x-min[i]);
+  dims.forEach(v=>boundedNumber(v,0.000001,LIMITS.dimension,'Габарит STL'));
+  const volCm3=boundedNumber(Math.abs(sum)/6000,0.000001,LIMITS.volume,'Объём STL');
+  const boxVolume=dims.reduce((a,b)=>a*b,1)/1000;
+  if (volCm3>boxVolume*(1+1e-6)) throw new Error('Объём STL несовместим с габаритами.');
+  return {volCm3,dims,tris:triangles};
+}
+
+function estimatePrice(input) {
+  const cast=input.tech==='Литьё в силикон';
+  if (!cast && !Object.hasOwn(R.print,input.tech)) throw new Error('Неизвестная технология.');
+  const node=cast ? R.silicone : R.print[input.tech];
+  if (!Object.hasOwn(node.materials,input.material)) throw new Error('Выберите материал.');
+  const volume=boundedNumber(input.volume,0.000001,LIMITS.volume,'Объём');
+  const rate=boundedNumber(input.rate,0.01,1000000,'Демо-ставка');
+  const cx=R.modifiers.complexity.options[input.complexity], urgency=R.modifiers.urgency.options[input.urgency];
+  boundedNumber(cx,1,1.7,'Коэффициент сложности'); boundedNumber(urgency,1,1.5,'Коэффициент срочности');
+  const mat=node.materials[input.material].k, rows=[];
+  let total=0, qty=1;
+  if (cast) {
+    qty=boundedNumber(input.quantity,1,100000,'Тираж',true);
+    const size=R.silicone.form.size_coef[input.size];
+    boundedNumber(size,1,3,'Размер формы');
+    if (!['fixed','print'].includes(input.masterMode)) throw new Error('Выберите способ расчёта мастер-модели.');
+    const master=input.hasMaster ? 0 : input.masterMode==='print' ? volume*R.print.SLA.base*node.master_model.print_mode.density_factor : node.master_model.base;
+    const forms=Math.ceil(qty/node.form.yield), formCost=forms*node.form.base*size;
+    const casting=qty*volume*rate*mat*cx;
+    total=(master+formCost+casting)*urgency;
+    rows.push(['Мастер-модель',input.hasMaster ? 'Предоставлена' : input.masterMode==='print' ? 'Демо-печать мастера на SLA' : 'Условная фиксированная сумма',master]);
+    rows.push([`Формы: ${forms} шт`,`${forms} × ${node.form.base} × ${size}`,formCost]);
+    rows.push([`Отливки: ${qty} шт`,`${qty} × ${volume} × ${rate} × ${mat} × ${cx}`,casting]);
+    if(urgency!==1) rows.push(['Срочность',`К сумме мастера, форм и отливок: × ${urgency}`,null]);
+  } else {
+    const fill=boundedNumber(input.fill,10,100,'Заполнение');
+    const hours=boundedNumber(input.hours,0,10000,'Часы постобработки');
+    const core=volume*fill/100*rate*mat*cx*urgency, post=hours*R.modifiers.postprocessing.rate;
+    total=core+post;
+    rows.push(['Печать',`${volume} × ${fill}% × ${rate} × ${mat} × ${cx} × ${urgency}`,core]);
+    if(post>0)rows.push(['Постобработка',`${hours} × ${R.modifiers.postprocessing.rate}`,post]);
+  }
+  if(total<node.min_order) { rows.push(['Демо-минимум заказа',`Сумма поднята до ${node.min_order} ₽`,null]); total=node.min_order; }
+  if(input.scan) { total+=R.digitize.scan.base; rows.push(['Демо-сканирование','',R.digitize.scan.base]); }
+  if(input.reverse) { total+=R.digitize.reverse.base; rows.push(['Демо-реверс / CAD','',R.digitize.reverse.base]); }
+  rows.forEach(row=>{if(row[2]!==null)boundedNumber(row[2],0,LIMITS.total,'Строка расчёта');});
+  const rounded=roundSum(total);
+  return {total:rounded, perPiece:cast ? rounded/qty : null, rows};
+}
+
+// UI binding starts here. All user-facing values are inserted as text nodes.
+const byId=id=>document.getElementById(id);
+const TECHS=[...Object.keys(R.print),'Литьё в силикон'];
+let current='SLS', mesh=null, fileGeneration=0, activeReader=null;
+function money(n) { return Math.round(n).toLocaleString('ru-RU')+' ₽'; }
+function readNumber(id) { const text=byId(id).value.trim(); return text==='' ? NaN : Number(text); }
+function clear(node) { node.replaceChildren(); }
+function textNode(tag,text,className) { const node=document.createElement(tag); node.textContent=text; if(className)node.className=className; return node; }
+function fillSelect(id,options) { const node=byId(id); clear(node); Object.keys(options).forEach(key=>{const option=textNode('option',key); option.value=key; node.appendChild(option);}); }
+function meshNotice(text) { const node=byId('meshInfo');node.className='meshinfo meshwarn';node.textContent=text; }
+function renderMesh() {
+  if(!mesh) { clear(byId('meshInfo')); byId('meshInfo').className=''; return; }
+  const maxDimension=Math.max(...mesh.dims), zone=R.build_zone[current];
+  const density=current==='Литьё в силикон' ? R.density.silicone_cast : current==='SLM' ? R.density.SLM[byId('mat').value] : R.density[current];
+  const node=byId('meshInfo'); node.className='meshinfo';
+  node.textContent=`STL: ${mesh.volCm3.toLocaleString('ru-RU',{maximumFractionDigits:6})} см³ · ${mesh.dims.map(n=>n.toFixed(2)).join(' × ')} мм · ${mesh.tris.toLocaleString('ru-RU')} треугольников. Масса сплошной модели ≈ ${(mesh.volCm3*density).toFixed(1)} г (условная плотность).`;
+  const warnings=[];
+  if(maxDimension<2 || maxDimension>3000) warnings.push('Проверьте масштаб: STL интерпретируется в миллиметрах.');
+  if(maxDimension>zone) warnings.push(`Габарит превышает демонстрационную рабочую зону ${zone} мм. Требуется отдельная проверка.`);
+  if(warnings.length) {node.className+=' meshwarn'; node.appendChild(textNode('div',warnings.join(' ')));}
+}
+function syncTech() {
+  const cast=current==='Литьё в силикон', node=cast ? R.silicone : R.print[current];
+  [...byId('techBtns').children].forEach((button,i)=>{button.classList.toggle('on',TECHS[i]===current);button.setAttribute('aria-pressed',String(TECHS[i]===current));});
+  byId('castFields').classList.toggle('hidden',!cast);
+  byId('ppBlock').classList.toggle('hidden',cast); byId('fillBlock').classList.toggle('hidden',cast);
+  fillSelect('mat',node.materials); byId('rate').value=cast ? node.cast_rate.base : node.base;
+  byId('techSrc').textContent=cast ? `Демо-допущения: форма ${node.form.base} ₽; мастер ${node.master_model.base} ₽; ресурс формы ${node.form.yield} отливок; минимум заказа ${node.min_order} ₽.` : `Условная базовая ставка; её можно изменить ниже. Демо-минимум заказа: ${node.min_order} ₽.`;
+  renderMesh();
+}
+TECHS.forEach(tech=>{const button=textNode('button',tech);button.type='button';button.onclick=()=>{current=tech;syncTech();calc();};byId('techBtns').appendChild(button);});
+fillSelect('cx',R.modifiers.complexity.options);fillSelect('ur',R.modifiers.urgency.options);
+
+const SHAPE_LABELS={box:['Длина X','Ширина Y','Высота Z'],sphere:['Диаметр D'],ellipsoid:['Ось A','Ось B','Ось C'],cylinder:['Диаметр D','Высота H']};
+function renderDims() {
+  const row=byId('dimsRow');clear(row);
+  SHAPE_LABELS[byId('shape').value].forEach((label,i)=>{const wrap=document.createElement('div'),input=document.createElement('input'),caption=textNode('label',label+', мм');input.type='number';input.id='shape-dim-'+i;input.className='dimInp';input.min='0.01';input.max=String(LIMITS.dimension);input.step='any';input.value='50';caption.htmlFor=input.id;wrap.append(caption,input);row.appendChild(wrap);});
+  byId('shapeOut').textContent='';
+}
+byId('shape').addEventListener('change',renderDims);
+byId('calcVol').addEventListener('click',()=>{
+  try {
+    const dims=[...document.querySelectorAll('.dimInp')].map(node=>node.value.trim()==='' ? NaN : Number(node.value));
+    const volume=shapeVolume(byId('shape').value,dims,readNumber('wall'));
+    cancelRead();mesh=null;renderMesh();
+    byId('vol').value=String(Number(volume.toPrecision(12)));byId('volHint').textContent='(геометрическое приближение)';
+    const maximum=Math.max(...dims);byId('size').value=maximum<=100?'до 100 мм':maximum<=250?'100-250 мм':'250-500 мм';
+    byId('shapeOut').textContent=`Объём ≈ ${volume.toLocaleString('ru-RU',{maximumFractionDigits:6})} см³.${maximum>500?' Габарит больше 500 мм: демонстрационный расчёт формы здесь неприменим.':''}`;
+    calc();
+  } catch(error) { cancelRead();mesh=null;byId('vol').value='';calc();byId('shapeOut').textContent=error.message; }
+});
+renderDims();
+function cancelRead() { fileGeneration++;if(activeReader && activeReader.readyState===1)activeReader.abort();activeReader=null; }
+function applyMeshToInputs() {
+  byId('vol').value=String(Number(mesh.volCm3.toPrecision(12)));byId('volHint').textContent='(STL, миллиметры)';
+  const maximum=Math.max(...mesh.dims);byId('size').value=maximum<=100?'до 100 мм':maximum<=250?'100-250 мм':'250-500 мм';
+}
+function handleFile(file) {
+  if(!file)return;
+  cancelRead();const generation=fileGeneration;mesh=null;byId('vol').value='';byId('volHint').textContent='';calc();
+  const filename=String(file.name||'без имени');
+  if(!filename.toLowerCase().endsWith('.stl')) { meshNotice(`Файл «${filename}» не поддерживается. Выберите STL или введите объём вручную.`);return; }
+  if(!Number.isFinite(file.size) || file.size<15 || file.size>LIMITS.fileBytes) {meshNotice('STL должен быть непустым и не больше 10 МиБ.');return;}
+  meshNotice('Чтение STL в браузере…');
+  const reader=new FileReader();activeReader=reader;
+  reader.onload=()=>{
+    if(generation!==fileGeneration)return;
+    activeReader=null;
+    try {mesh=parseSTL(reader.result);applyMeshToInputs();calc();renderMesh();}
+    catch(error) {mesh=null;byId('vol').value='';calc();meshNotice(`STL не принят: ${error.message} Можно ввести объём вручную.`);}
+  };
+  reader.onerror=()=>{if(generation===fileGeneration){activeReader=null;meshNotice('Не удалось прочитать файл. Выберите другой STL или введите объём вручную.');}};
+  try {reader.readAsArrayBuffer(file);}catch {activeReader=null;meshNotice('Не удалось открыть файл. Введите объём вручную.');}
+}
+const drop=byId('drop'),fileInput=byId('file');
+drop.addEventListener('click',event=>{if(event.target!==fileInput)fileInput.click();});
+drop.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();fileInput.click();}});
+['dragenter','dragover'].forEach(type=>drop.addEventListener(type,event=>{event.preventDefault();drop.classList.add('hover');}));
+['dragleave','drop'].forEach(type=>drop.addEventListener(type,event=>{event.preventDefault();drop.classList.remove('hover');}));
+drop.addEventListener('drop',event=>handleFile(event.dataTransfer.files[0]));
+fileInput.addEventListener('change',event=>{handleFile(event.target.files[0]);event.target.value='';});
+
+function calc() {
+  try {
+    const result=estimatePrice({tech:current,material:byId('mat').value,volume:readNumber('vol'),rate:readNumber('rate'),complexity:byId('cx').value,urgency:byId('ur').value,fill:readNumber('fill'),hours:readNumber('pp'),quantity:readNumber('qty'),size:byId('size').value,hasMaster:byId('hasMaster').checked,masterMode:byId('masterMode').value,scan:byId('addScan').checked,reverse:byId('addRev').checked});
+    byId('price').textContent=money(result.total);byId('perpiece').textContent=result.perPiece===null?'':`≈ ${money(result.perPiece)} за штуку, включая выбранные опции`;
+    const breakdown=byId('break');clear(breakdown);
+    result.rows.forEach(([label,detail,value])=>{const row=document.createElement('div'),left=document.createElement('span');left.append(textNode('span',label),document.createElement('br'),textNode('span',detail,'src'));row.append(left,textNode('b',value===null?'':money(value)));breakdown.appendChild(row);});
+    const total=document.createElement('div');total.className='tot';total.append(textNode('span','Итого (демо, округлено)'),textNode('span',money(result.total)));breakdown.appendChild(total);
+    const warning=current==='Литьё в силикон'?'Стоимость формы, ресурс и ставки условные. Габариты свыше 500 мм в этой модели не учитываются.':'Это приблизительная демонстрация формулы. Расход материала, поддержек и время печати уточняются в слайсере.';
+    byId('warnBox').replaceChildren(textNode('div',warning,'warn'));byId('basis').textContent='Условные ставки встроены в эту страницу. Разбивка показывает, как меняется демонстрационная сумма при изменении параметров.';
+  } catch(error) {
+    byId('price').textContent='—';byId('perpiece').textContent='';clear(byId('break'));byId('warnBox').replaceChildren(textNode('div',error.message,'warn'));byId('basis').textContent='Исправьте параметры, чтобы получить демонстрационный расчёт.';
+  }
+  renderMesh();
+}
+const calculationInputs=['vol','rate','mat','cx','ur','pp','qty','size','hasMaster','addScan','addRev','fill','masterMode'];
+function onInput(event) {
+  if(!calculationInputs.includes(event.target.id))return;
+  if(event.target.id==='vol') {cancelRead();mesh=null;byId('volHint').textContent='(ручной ввод)';}
+  calc();
+}
+document.addEventListener('input',onInput);document.addEventListener('change',onInput);
+syncTech();calc();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+<title id="title">Component dimension study</title>
+<desc id="description">Original technical illustration of a generic bracket with illustrative dimensions. Not a production drawing.</desc>
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#a6bfd2" stroke-width="0.7" opacity="0.2"/></pattern>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbfdff"/><stop offset="1" stop-color="#9fb7cb"/></linearGradient>
+  <linearGradient id="side" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7d9bb5"/><stop offset="1" stop-color="#3d5d7a"/></linearGradient>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b91ff"/><stop offset="1" stop-color="#1451a3"/></linearGradient>
+  <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#365773"/><stop offset="1" stop-color="#142a42"/></linearGradient>
+  <radialGradient id="light"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#edf4fb"/></radialGradient>
+  <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#3483cc"/></marker>
+</defs>
+<rect width="1200" height="675" fill="url(#light)"/>
+<rect x="32" y="32" width="1136" height="611" rx="22" fill="url(#grid)"/>
+<ellipse cx="598" cy="500" rx="344" ry="52" fill="#628db5" opacity="0.13"/>
+<g stroke-linejoin="round">
+  <path d="M333 304L640 196L852 300L546 417Z" fill="url(#metal)" stroke="#7895ae" stroke-width="2"/>
+  <path d="M333 304V392L546 506V417Z" fill="url(#side)"/>
+  <path d="M546 417L852 300V389L546 506Z" fill="#6a8ea8"/>
+  <path d="M365 287V218L468 180V251" fill="#d7e7f3" stroke="#7895ae" stroke-width="2"/>
+  <path d="M468 180L491 195V264L468 251Z" fill="#688da9"/>
+  <ellipse cx="559" cy="297" rx="59" ry="29" transform="rotate(-19 559 297)" fill="#4f7595"/>
+  <ellipse cx="559" cy="290" rx="59" ry="29" transform="rotate(-19 559 290)" fill="#e4eef7" stroke="#7895ae" stroke-width="2"/>
+  <ellipse cx="712" cy="335" rx="22" ry="11" transform="rotate(-19 712 335)" fill="#3e6482"/>
+  <ellipse cx="419" cy="323" rx="18" ry="9" transform="rotate(-19 419 323)" fill="#3e6482"/>
+</g>
+<g stroke="#3483cc" fill="none" stroke-width="2">
+  <path d="M313 394L274 412M539 516L499 542M280 434L490 544" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <path d="M660 180L682 143M860 288L893 264M692 159L882 253" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <path d="M558 290L688 108H882" stroke-dasharray="6 7"/>
+  <circle cx="558" cy="290" r="5" fill="#3483cc"/>
+</g>
+<g font-family="system-ui, sans-serif" fill="#285e8e" font-size="23" font-weight="600">
+  <text x="346" y="532" transform="rotate(28 346 532)">84.0 mm</text>
+  <text x="733" y="176" transform="rotate(27 733 176)">42.0 mm</text>
+  <text x="789" y="96">Ø 24.0</text>
+</g>
+<g fill="#5681a6" font-family="system-ui, sans-serif" font-size="14" letter-spacing="3"><text x="66" y="76">01 / DIMENSION STUDY</text><text x="944" y="606">SCHEMATIC</text></g>
+</svg>
